@@ -1,13 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setHasScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   const navItems = [
     { name: "HOME", href: "/" },
@@ -33,13 +44,12 @@ export default function Header() {
             ))}
           </div>
 
-          <div className="  ml-auto hidden md:flex ">
+          <div className="ml-auto hidden md:flex ">
             <Button asChild className="hover:bg-[#9B9898]">
               <Link href="/#contact">RESUME</Link>
             </Button>
           </div>
         </nav>
-
         {/* Mobile Navigation */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild className="md:hidden">
@@ -48,13 +58,16 @@ export default function Header() {
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-            <nav className="flex flex-col gap-6 mt-10">
+          <SheetContent
+            side="right"
+            className="!top-20 !h-auto !max-h-[300px] !w-[250px] rounded-xl shadow-xl transition-all duration-300 "
+          >
+            <nav className="flex flex-col items-center gap-6 pt-4">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="text-lg font-medium hover:text=slate-600 transition-colors"
+                  className="text-lg font-medium hover:text-[#9B9898] transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}
@@ -68,6 +81,37 @@ export default function Header() {
             </nav>
           </SheetContent>
         </Sheet>
+        {/* <div className="fixed lg:hidden top-0 left-0 w-full flex items-center justify-between px-6 py-4 bg-white shadow z-50">
+          <Sheet open={isOpen && hasScrolled} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                {isOpen ? (
+                  <X className="w-4 h-6" />
+                ) : (
+                  <Menu className="w-4 h-6" />
+                )}
+                <span className="sr-only">Toggle Menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="!top-20 !h-auto !max-h-[300px] !w-[250px] rounded-xl shadow-xl transition-all duration-300"
+            >
+              <nav className="flex flex-col gap-4">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="text-lg font-medium hover:text-gray-600"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div> */}
       </div>
     </header>
   );
