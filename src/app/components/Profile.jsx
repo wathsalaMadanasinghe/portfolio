@@ -3,29 +3,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
-
-const socialLinks = [
-  {
-    href: "https://github.com/wathsalaMadanasinghe",
-    label: "Github",
-    iconPath: "/assets/github-logo.svg",
-  },
-  {
-    href: "https://www.linkedin.com/in/wathsala-madanasinghe-916072312",
-    label: "Linkedin",
-    iconPath: "/assets/linkedin-logo.svg",
-  },
-  {
-    href: "mailto:wathsalamadanasinghe@gmail.com",
-    label: "Email",
-    iconPath: "/assets/email-logo.svg",
-  },
-  {
-    href: "https://www.behance.net/chirantwathsal",
-    label: "Behance",
-    iconPath: "/assets/behance-logo.svg",
-  },
-];
+import { socialLinks } from "../constant";
 
 const About = () => {
   return (
