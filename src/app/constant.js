@@ -1,25 +1,27 @@
-import { Image } from "next/image";
-
 export const socialLinks = [
   {
     href: "https://github.com/wathsalaMadanasinghe",
     label: "Github",
     iconPath: "/assets/github-logo.svg",
+    description: "Check out my code repositories",
   },
   {
     href: "https://www.linkedin.com/in/wathsala-madanasinghe-916072312",
     label: "Linkedin",
     iconPath: "/assets/linkedin-logo.svg",
+    description: "Connect with me professionally",
   },
   {
     href: "mailto:wathsalamadanasinghe@gmail.com",
     label: "Email",
     iconPath: "/assets/email-logo.svg",
+    description: "wathsalamadanasinghe@gmail.com",
   },
   {
     href: "https://www.behance.net/chirantwathsal",
     label: "Behance",
     iconPath: "/assets/behance-logo.svg",
+    description: "View my design portfolio",
   },
 ];
 
