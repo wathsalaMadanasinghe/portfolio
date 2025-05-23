@@ -9,6 +9,23 @@ import { Menu, X } from "lucide-react";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleView = () => {
+    setError(null);
+    try {
+      // This forces the browser to treat it as a PDF
+      const link = document.createElement("a");
+      link.href = "/resume.pdf#view=FitH";
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "View failed");
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => {
@@ -45,8 +62,11 @@ export default function Header() {
           </div>
 
           <div className="ml-auto hidden md:flex ">
-            <Button asChild className="hover:bg-[#9B9898]">
-              <Link href="/#contact">RESUME</Link>
+            <Button
+              onClick={handleView}
+              className="px-6 py-3 text-white rounded-lg hover:bg-[#9B9898] transition-colors duration-200 shadow-md hover:shadow-lg"
+            >
+              RESUME
             </Button>
           </div>
         </nav>
@@ -75,7 +95,7 @@ export default function Header() {
               ))}
               <Button asChild className="mt-4">
                 <Link href="/#contact" onClick={() => setIsOpen(false)}>
-                  CONTACT
+                  RESUME
                 </Link>
               </Button>
             </nav>

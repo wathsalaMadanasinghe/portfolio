@@ -3,99 +3,61 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { socialLinks } from "../constant";
 
 export default function Profile() {
-  const [mouseY, setMouseY] = useState(0);
-  const containerRef = useRef(null);
-  const [containerCenter, setContainerCenter] = useState({ y: 0 });
+  // Move PDF-related state to main component
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // PDF config
+  const config = {
+    filename: "Wathsala_Madanasinghe_Resume.pdf",
+    path: "/resume.pdf", // Direct path from public folder
+    title: "Resume - Wathsala Madanasinghe",
+  };
+
+  // Move PDF handlers to main component
+  const handleDownload = async () => {
+    setIsDownloading(true);
+    setError(null);
+
+    try {
+      // Simple direct download approach
+      const link = document.createElement("a");
+      link.href = "/resume.pdf"; // Change this to your actual filename
+      link.download = "Wathsala_Madanasinghe_Resume.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Download failed");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handleView = () => {
+    setError(null);
+    try {
+      // This forces the browser to treat it as a PDF
+      const link = document.createElement("a");
+      link.href = "/resume.pdf#view=FitH";
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "View failed");
+    }
+  };
+
+  // Your existing state
+
   const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    // Check if we're on mobile initially
-    setIsMobile(window.innerWidth < 768);
-
-    // Calculate the center point of the container
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      setContainerCenter({ y: rect.top + rect.height / 2 });
-    }
-
-    const handleResize = () => {
-      // Update mobile state on resize
-      setIsMobile(window.innerWidth < 768);
-
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        setContainerCenter({ y: rect.top + rect.height / 2 });
-      }
-    };
-
-    // Handle initial setup and resize
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    // Recalculate container center when component mounts properly
-    const timeoutId = setTimeout(() => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        setContainerCenter({ y: rect.top + rect.height / 2 });
-      }
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
-  }, []);
-
-  const handleMouseMove = (e) => {
-    if (!isMobile) {
-      setMouseY(e.clientY);
-    }
-  };
-
-  const calculatePosition = (index, totalItems) => {
-    // If mobile, just return a centered position without effects
-    if (isMobile) {
-      return {
-        x: 0,
-        y: 0,
-        zIndex: 10,
-        opacity: 1,
-        scale: 1,
-      };
-    }
-
-    // Circle parameters
-    const radius = 120; // Radius of the circular path
-    const totalAngle = 120; // Total angle of the arc in degrees
-
-    // Calculate mouse influence with increased sensitivity
-    const mouseInfluence = mouseY ? (mouseY - containerCenter.y) / 100 : 0;
-
-    // Base angle for each item (evenly distributed along the arc)
-    const itemAngleStep = totalAngle / (totalItems - 1);
-    const baseAngleRad =
-      (index * itemAngleStep - totalAngle / 2) * (Math.PI / 180);
-
-    // Add mouse influence to rotate the whole arc
-    const mouseRotationInfluence = mouseInfluence * 60 * (Math.PI / 180);
-    const angleRad = baseAngleRad + mouseRotationInfluence;
-
-    // Calculate position on the circle
-    const x = 0; // Center x position
-    const y = -radius * Math.sin(angleRad); // Negative sine for correct direction
-
-    // Calculate z-index and opacity based on y position
-    const zIndex = 10 - Math.floor(Math.abs(y) / 20);
-    const opacity = 1 - Math.abs(y) / (radius * 1.5);
-    const scale = 1 - Math.abs(y) / (radius * 3);
-
-    return { x, y, zIndex, opacity, scale };
-  };
 
   return (
     <section id="profile" className="py-5 w-full">
@@ -137,15 +99,34 @@ export default function Profile() {
                 Connect LinkedIn
               </Link>
             </Button>
-            <Button className="bg-[#9B9898]" asChild>
-              <Link
-                href="https://github.com/wathsalaMadanasinghe"
-                download
-                className="flex items-center gap-2"
-              >
-                Download Resume
-              </Link>
-            </Button>
+
+            {/* PDF Buttons Section */}
+            <div className="flex flex-col items-center gap-4">
+              {/* Error Message */}
+              {error && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                  {error}
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex gap-4">
+                <Button
+                  onClick={handleDownload}
+                  disabled={isDownloading}
+                  className="px-4 bg-[#9B9898] text-white rounded-lg hover:bg-slate-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isDownloading ? (
+                    <>
+                      <span className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                      Downloading...
+                    </>
+                  ) : (
+                    <>Download Resume</>
+                  )}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -175,52 +156,28 @@ export default function Profile() {
             </div>
           </div>
         ) : (
-          // Desktop/Tablet Layout - Circular motion effect
-          <div
-            className="relative h-80 w-16 flex-none hidden md:flex flex-col items-center justify-center"
-            onMouseMove={handleMouseMove}
-          >
-            <div
-              ref={containerRef}
-              className="relative h-full w-full flex flex-col items-center justify-center"
-            >
-              {/* Top gradient overlay */}
-              <div className="absolute top-0 w-full h-24 bg-gradient-to-b from-white to-transparent z-20 pointer-events-none"></div>
-
-              {/* Bottom gradient overlay */}
-              <div className="absolute bottom-0 w-full h-24 bg-gradient-to-t from-white to-transparent z-20 pointer-events-none"></div>
-
-              {/* Social links container */}
-              <div className="relative w-full h-full">
-                {socialLinks.map((link, index) => {
-                  const pos = calculatePosition(index, socialLinks.length);
-
-                  return (
-                    <Link
-                      key={link.label}
-                      href={link.href}
-                      aria-label={link.label}
-                      className="absolute left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out group"
-                      style={{
-                        transform: `translateX(-50%) translateY(${pos.y}px) scale(${pos.scale})`,
-                        opacity: pos.opacity,
-                        zIndex: pos.zIndex,
-                      }}
-                    >
-                      <div className="w-8 h-8 relative">
-                        <Image
-                          src={link.iconPath}
-                          alt={`${link.label}-logo`}
-                          fill
-                          className={`group-hover:filter group-hover:brightness-75 transition-all duration-300 ${
-                            Math.abs(pos.y) > 90 ? "blur-sm" : ""
-                          }`}
-                          style={{ filter: "invert(0)" }}
-                        />
-                      </div>
-                    </Link>
-                  );
-                })}
+          // Desktop Layout - Vertical column of icons
+          <div className="w-16 flex-none hidden md:flex flex-col items-center justify-center">
+            <div className=" flex flex-row items-center">
+              <div className="relative w-full h-full ">
+                {socialLinks.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    aria-label={link.label}
+                    className="group "
+                  >
+                    <div className="w-8 h-8 relative py-10 ">
+                      <Image
+                        src={link.iconPath}
+                        alt={`${link.label}-logo`}
+                        fill
+                        className="hover:fill-slate-500"
+                        style={{ filter: "invert(0)" }}
+                      />
+                    </div>
+                  </Link>
+                ))}
               </div>
             </div>
           </div>

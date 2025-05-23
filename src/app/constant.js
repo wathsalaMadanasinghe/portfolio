@@ -210,15 +210,7 @@ export const projects = [
     description:
       "An interactive system that helps artists keep their drawings clean by detecting hand position using ultrasonic sensors. A motorized cover rolls up automatically to protect unused areas of the drawing board, enhancing focus and cleanliness during the creative process. This project was supervised by Dr. Ravindra De Silva (Head of the department, Department of computer science, University of Sri Jayawardenapura)",
     images: "/assets/doodlebuddy-pic.jpg",
-    tags: [
-      "NextJs",
-      "TailwindCSS",
-      "ShadCN",
-      "Firestore",
-      "Gemini AI-sdk",
-      "Vapi Agent",
-      "Firebase Auth",
-    ],
+    tags: [],
     buttons: [{ label: "View", type: "video", url: "/assets/hci-video.mp4" }],
   },
   {
