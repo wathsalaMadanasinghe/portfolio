@@ -93,45 +93,15 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
-              <Button asChild className="mt-4">
-                <Link href="/#contact" onClick={() => setIsOpen(false)}>
-                  RESUME
-                </Link>
+              <Button
+                onClick={handleView}
+                className="px-6 py-3 text-white rounded-lg hover:bg-[#9B9898] transition-colors duration-200 shadow-md hover:shadow-lg"
+              >
+                RESUME
               </Button>
             </nav>
           </SheetContent>
         </Sheet>
-        {/* <div className="fixed lg:hidden top-0 left-0 w-full flex items-center justify-between px-6 py-4 bg-white shadow z-50">
-          <Sheet open={isOpen && hasScrolled} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                {isOpen ? (
-                  <X className="w-4 h-6" />
-                ) : (
-                  <Menu className="w-4 h-6" />
-                )}
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="!top-20 !h-auto !max-h-[300px] !w-[250px] rounded-xl shadow-xl transition-all duration-300"
-            >
-              <nav className="flex flex-col gap-4">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="text-lg font-medium hover:text-gray-600"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
-        </div> */}
       </div>
     </header>
   );
