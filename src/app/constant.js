@@ -47,9 +47,9 @@ export const categories = [
         iconPath: "/assets/css-logo.svg",
       },
       {
-        id: "mysql",
-        title: "MySQL",
-        iconPath: "/assets/mysql-logo.svg",
+        id: "sql",
+        title: "SQL",
+        iconPath: "/assets/sql.svg",
       },
     ],
   },
@@ -92,7 +92,7 @@ export const categories = [
       },
       {
         id: "express",
-        title: "Epress.js",
+        title: "Express.js",
         iconPath: "/assets/express-logo.svg",
       },
       {
@@ -127,6 +127,11 @@ export const categories = [
         title: "Blender",
         iconPath: "/assets/blender-logo.svg",
       },
+      {
+        id: "photoshop",
+        title: "Adobe Photoshop",
+        iconPath: "/assets/photoshop.svg",
+      },
     ],
   },
 
@@ -150,6 +155,11 @@ export const categories = [
         id: "vercel",
         title: "Vercel (deployment)",
         iconPath: "/assets/vercel-logo.svg",
+      },
+      {
+        id: "postman",
+        title: "Postman",
+        iconPath: "/assets/postman.svg",
       },
     ],
   },
