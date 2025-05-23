@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import fs from "fs";
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Path to your PDF file in the public directory
     const pdfPath = path.join(process.cwd(), "public", "sample.pdf");
